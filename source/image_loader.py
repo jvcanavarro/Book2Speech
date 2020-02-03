@@ -20,4 +20,13 @@ def capture_image():
         if key == ord('q'):
             webcam.release()
             cv2.destroyAllWindows()
-            return 'image.jpg'
+            return image
+            # return 'image.jpg'
+
+
+def load_image(filename):
+    return cv2.imread(filename)
+
+
+def load_folder(directory):
+    return [cv2.imread(filename) for filename in directory]
