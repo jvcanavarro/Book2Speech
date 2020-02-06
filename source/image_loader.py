@@ -21,11 +21,11 @@ def capture_image():
         if key == ord('q'):
             webcam.release()
             cv2.destroyAllWindows()
-            return image
+            return [image]
 
 
 def load_image(filename):
-    return cv2.imread(filename)
+    return [cv2.imread(filename)]
 
 
 def load_folder(directory):

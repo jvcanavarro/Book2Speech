@@ -1,6 +1,6 @@
 from image_loader import capture_image, load_image, load_folder
+from image_processor import process_image
 from glob import glob
-import image_loader
 import click
 
 
@@ -8,16 +8,18 @@ import click
 @click.option('-i', '--image', type=click.Path(exists=True))
 @click.option('-p', '--path', type=click.Path(exists=True))
 def start(image, path):
+
+    # loading images
     if image:
-        pic = load_image(image)
+        pics = load_image(image)
     elif path:
         files = glob(path + '*jpg') + glob(path + '*png')
-        pic = load_folder(files)
+        pics = load_folder(files)
     else:
-        pic = capture_image()
+        pics = capture_image()
 
-    print(len(pic))
-
+    # pre processing: dewarping, gray scale, etc.
+    processed_pics = [process_image(pic) for pic in pics]
 
 
 
