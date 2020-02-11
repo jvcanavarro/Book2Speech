@@ -11,7 +11,7 @@ def capture_image():
         key = cv2.waitKey(1)
 
         if key == ord('s'):
-            # cv2.imwrite(filename='image.jpg', img=frame)
+            cv2.imwrite(filename='image.jpg', img=frame)
             # image = cv2.imread('image.jpg')
             image = frame
             cv2.imshow('Captured Image', image)
@@ -21,11 +21,12 @@ def capture_image():
         if key == ord('q'):
             webcam.release()
             cv2.destroyAllWindows()
-            return [image]
+            print(type(image))
+            return image
 
 
 def load_image(filename):
-    return [cv2.imread(filename)]
+    return cv2.imread(filename)
 
 
 def load_folder(directory):
