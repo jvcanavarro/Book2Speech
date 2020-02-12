@@ -16,14 +16,14 @@ def get_text(image, language='por'):
 
 
 def get_threshold(image):
-    # gray = get_grayscaled(image)
+    gray = get_grayscaled(image)
     # reversed = cv2.bitwise_not(gray)
-    # reversed = gray
-    return cv2.threshold(image, 0, 255, cv2.THRESH_BINARY | cv2.THRESH_OTSU)[1]
+    reversed = gray
+    return cv2.threshold(reversed, 0, 255, cv2.THRESH_BINARY | cv2.THRESH_OTSU)[1]
 
 
 def get_angle(image):
-    coords = np.column_stack(np.where())
+    coords = np.column_stack(np.where(image > 0))
     angle = cv2.minAreaRect(coords)[-1]
 
     if angle < -45:
@@ -42,4 +42,4 @@ def deskew(image):
     center = (w // 2, h // 2)
 
     matrix = cv2.getRotationMatrix2D(center, angle, 1)
-    return cv2.warpAffine(thresh, matrix, (h, w), flags=cv2.INTER_CUBIC, borderMode=cv2.BORDER_REPLICATE)
+    return cv2.warpAffine(image, matrix, (h, w), flags=cv2.INTER_CUBIC, borderMode=cv2.BORDER_REPLICATE)

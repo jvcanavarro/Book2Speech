@@ -2,7 +2,8 @@ from loader import capture_image, load_image, load_folder
 from glob import glob
 import processor
 import click
-
+import time
+import cv2
 
 @click.command()
 @click.option('-i', '--image', type=click.Path(exists=True))
@@ -18,13 +19,16 @@ def start(image, path):
     else:
         pics = capture_image()
 
+    # pre processing
 
-    deskewed = processor.deskew(image)
-    cv2.imshow(deskewed)
     # grey = processor.get_grayscaled(pics)
     # resize = processor.resize(grey)
     # thresh = processor.get_threshold(resize)
-    # print(processor.get_text(thresh))
+
+    # ocring
+    print(processor.get_text(pics))
+
+    #ttsing
 
 
 if __name__ == '__main__':
