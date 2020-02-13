@@ -1,0 +1,46 @@
+112 JÚLIO CESAR R. PEREIRA
+
+Na parte superior da tabela representada pela figura 27 encontra-se a “Ma.
+triz de coeficientes de dissimilaridades euclidianas ao quadrado”, que significa a
+tabela das distâncias euclidianas entre os diferentes objetos estudados (Institutos
+de Pesquisa). A referência “ao quadrado” significa apenas que se dispensou a
+operação de radiciação prevista na fórmula apresentada anteriormente. Nota-se
+que a menor distância é entre os objetos 5 e 6 (Institutos de Saúde e Lauro de
+Souza Lima) e que a maior distância é entre os objetos 1 e 4 (Institutos Adolfo
+Lutz e Pasteur).
+
+Em seguida, aparece o esquema de aglomeração: como esperado, os dois
+primeiros objetos a se reunir (estágio 1) para constituir um grupo são os Institu-
+tos de Saúde (5) e Lauro de Souza Lima (6) e o coeficiente de aglomeração é
+exatamente a distância entre eles (aí mostrada apenas com maior número de ca-
+sas decimais). No passo seguinte, estágio 2, o Instituto Pasteur (4) reúne-se ao
+Instituto de Saúde (5) — o coeficiente de aglomeração, no entanto, já não é mais
+a distância original entre esses dois institutos porque o Instituto de Saúde (5) já
+havia se reunido ao Lauro de Souza Lima (6), constituindo o primeiro cluster:
+note-se que a distância entre 4 e 6 é de 3,28, enquanto o coeficiente do estágio 2
+é 3,05. No terceiro estágio, ajuntam-se os Institutos 3 (Dante Pazzanese) e 4
+(Pasteur): novamente o coeficiente desse estágio é menor que a distância original
+entre os dois institutos. Essa seqilência prossegue até o 6º e último estágio (já que
+o total de institutos era 7), quando o Instituto Adolfo Lutz é alcançado: esse é o
+estágio de maior coeficiente, sugerindo que uma grande distância teve que ser
+coberta para trazer o Adolfo Lutz ao conjunto dos outros institutos — de fato, nota-
+se já na matriz de distâncias que o Adolfo Lutz registra grandes distâncias a to-
+dos os outros institutos.
+
+A figura apresentada após o esquema de aglomeração é uma representação
+visual dos passos dados a cada estágio de aglomeração. Pode-se pensar no pro-
+cesso de aglomeração como uma caminhada na qual os objetos mais próximos po-
+dem ser alcançados com passos curtos, enquanto os mais distantes exigem passos
+mais largos, ou pulos, para serem alcançados. Olhando o dendrograma fica-se
+com a impressão que os 2 primeiros estágios foram cobertos confortavelmente
+com passadas normais, enquanto o 3º e o 4º estágios exigiram passos mais lar-
+gos. Já o 5º e o 6º passos tornaram-se verdadeiros pulos. Esse raciocínio encon-
+tra paralelo na segiiência de coeficientes de aglomeração por estágios: enquanto
+
+até o 4º estágio foi coberta uma distância de 8,5, o 5º estágio necessita dobrar
+essa distância (16,3) para alcançar o próximo objeto e o 6º estágio precisa
+
+
+
+
+

@@ -26,8 +26,9 @@ def start(image, path):
     # thresh = processor.get_threshold(resize)
 
     # ocring
-    print(processor.get_text(pics))
-
+    text = processor.get_text(pics)
+    print(text)
+    processor.write_text(text, 'result.txt')
     #ttsing
 
 

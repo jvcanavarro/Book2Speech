@@ -15,6 +15,14 @@ def get_text(image, language='por'):
     return ocr.image_to_string(image, lang=language)
 
 
+def write_text(text, filename):
+    try:
+        with open(filename, 'w') as txt:
+            txt.write(text)
+    except IOError as txt:
+        print("Couldn't open or write to file (%s)." % txt)
+
+
 def get_threshold(image):
     gray = get_grayscaled(image)
     # reversed = cv2.bitwise_not(gray)
