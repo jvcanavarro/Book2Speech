@@ -6,14 +6,15 @@ import pytesseract
 from tesserocr import PyTessBaseAPI
 
 
-def image_to_text(image, wrapper='pytesseract', verbose=False):
+def image_to_text(image, wrapper, verbose=False):
     if wrapper == 'pytesseract':
-        text = pytesseract.image_to_string(image)
+        text = pytesseract.image_to_string(image, lang='por')
         if verbose:
+            # TODO
             pass
 
     elif wrapper == 'tesserocr':
-        with PyTessBaseAPI() as api:
+        with PyTessBaseAPI(lang='por') as api:
             api.SetImageFile(image)
             text = api.GetUTF8Text()
 
