@@ -18,5 +18,4 @@ def apply_transformations(ground_truth, hypothesis, transformation_type):
             jiwer.RemoveWhiteSpace(replace_by_space=True),
             jiwer.RemovePunctuation()
         ] + transformation.transforms
-
-    return transformation(ground_truth), transformation(hypothesis) 
+    return transformation(ground_truth), transformation(hypothesis)
