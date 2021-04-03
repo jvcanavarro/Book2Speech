@@ -2,6 +2,7 @@ import click
 
 from ocr.ocr import image_to_text
 from tts.tts import text_to_speech
+from camera.camera import take_picture
 from metrics.metrics import generate_metrics
 from spellchecker.spellchecker import correct_spelling
 from transformations.transformations import apply_transformations
@@ -25,14 +26,18 @@ from image_processing.image_processing import improve_image_quality
 @click.option('--transformation',
               type=click.Choice(['reduced', 'default', 'extended']),
               default='default')
-@click.option('--output-text', '-o', 'output', type=str, default='output.txt')
+@click.option('--output-text', '-o', 'output', type=str, default='output')
 def parse_parameters(image, text, dictionary, play_audio, disable_tts, mode,
                      use_tesserocr, metrics, transformation, output, save):
+    # Image Capture
+    # if not image.exists:
+    #     image = take_picture()
+
     # TODO: Image Processing
+    cleaned_image = improve_image_quality(image)
 
     # Tesseract
-    wrapper = 'tesserocr' if use_tesserocr else 'pytesseract'
-    ocr_text = image_to_text(image, wrapper)
+    ocr_text = image_to_text(image, use_tesserocr)
 
     # Text Processing
     true_text = text.readlines()  # text.read().splitlines()
@@ -56,7 +61,7 @@ def parse_parameters(image, text, dictionary, play_audio, disable_tts, mode,
 
     # Save Results
     if save:
-        with open(output, 'w') as text_file:
+        with open(output + '.txt', 'w') as text_file:
             text_file.write(ocr_text)
 
 
