@@ -1,3 +1,5 @@
+import cv2
+import sys
 import click
 
 from ocr.ocr import image_to_text
@@ -14,65 +16,81 @@ from image_processing.image_processing import improve_image_quality
 @click.command()
 @click.option("--text", "-t", type=click.File())
 @click.option("--image", "-i", type=click.Path())
+@click.option("--ocr-text", "-ot", type=click.File())
 @click.option("--dictionary", "-d", type=click.Path())
 @click.option("--play-audio", is_flag=True)
 @click.option("--disable-tts", is_flag=True)
+@click.option("--only-metrics", is_flag=True)
+@click.option("--improve-image", is_flag=True)
 @click.option("--use-tesserocr", is_flag=True)
 @click.option("--save-results", "-s", "save", is_flag=True)
 @click.option("--calculate-metrics", "metrics", is_flag=True)
 @click.option(
     "--correction-mode",
-    "mode",
     type=click.Choice(["simple", "compound", "segmentation"]),
     default="simple",
 )
 @click.option(
-    "--transformation",
+    "--transform-mode",
     type=click.Choice(["reduced", "default", "extended"]),
     default="default",
 )
-@click.option("--output-text", "-o", "output", type=str, default="output")
+@click.option("--output", "-o", type=str, default="output")
 def parse_parameters(
     image,
     text,
+    ocr_text,
     dictionary,
     play_audio,
     disable_tts,
-    mode,
+    only_metrics,
+    improve_image,
     use_tesserocr,
-    metrics,
-    transformation,
-    output,
     save,
+    metrics,
+    correction_mode,
+    transform_mode,
+    output,
 ):
+    true_text = text.readlines()  # text.read().splitlines()
+
+    if only_metrics:
+        ocr_text = ocr_text.readlines()
+        transformed_true_text, transformed_ocr_text = apply_transformations(
+            ocr_text, true_text, transform_mode
+        )
+        _ = generate_metrics(transformed_true_text, transformed_ocr_text)
+        sys.exit()
 
     # Image Capture
-    if not image.exists:
+    if not image:
         image = take_picture()
 
     # Image Processing
-    cleaned_image = improve_image_quality(image)
+    if improve_image:
+        image = improve_image_quality(image, output, save)
 
     # Tesseract
     ocr_text = image_to_text(image, use_tesserocr)
 
     # Text Processing
-    true_text = text.readlines()  # text.read().splitlines()
     # Transformations
     if dictionary or metrics:
         transformed_true_text, transformed_ocr_text = apply_transformations(
-            ocr_text, true_text, transformation
+            ocr_text, true_text, transform_mode
         )
     # Spell Checker
     if dictionary:
-        transformed_ocr_text = correct_spelling(transformed_ocr_text, dictionary, mode)
+        transformed_ocr_text = correct_spelling(
+            transformed_ocr_text, dictionary, correction_mode
+        )
 
     # Performance Evaluation
     # TODO: get a list of wrong words/characters
     if metrics:
         _ = generate_metrics(transformed_true_text, transformed_ocr_text)
 
-    # TODO: Text to Speech
+    # Text to Speech
     if not disable_tts:
         text_to_speech(transformed_ocr_text, output, play_audio)
 
