@@ -8,9 +8,9 @@ from tesserocr import PyTessBaseAPI
 
 def image_to_text(image, use_tesserocr=False):
     if use_tesserocr:
-        with PyTessBaseAPI(lang='por') as api:
+        with PyTessBaseAPI(lang="por") as api:
             api.SetImageFile(image)
             text = api.GetUTF8Text()
     else:
-        text = pytesseract.image_to_string(image, lang='por')
+        text = pytesseract.image_to_string(image, lang="por")
     return text
