@@ -2,7 +2,6 @@ import jiwer
 
 
 def apply_transformations(ground_truth, hypothesis, transformation_type):
-    # TODO: select a list of transformations
     transformation = jiwer.Compose(
         [
             jiwer.RemoveMultipleSpaces(),
@@ -20,4 +19,5 @@ def apply_transformations(ground_truth, hypothesis, transformation_type):
             jiwer.RemoveWhiteSpace(replace_by_space=True),
             jiwer.RemovePunctuation(),
         ] + transformation.transforms
+
     return transformation(ground_truth), transformation(hypothesis)
