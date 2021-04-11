@@ -25,6 +25,7 @@ from image_processing.image_processing import improve_image_quality
 @click.option("--use-tesserocr", is_flag=True)
 @click.option("--save-results", "-s", "save", is_flag=True)
 @click.option("--calculate-metrics", "metrics", is_flag=True)
+@click.option("--lang", "-l", type=click.Choice(["eng", "por"]), default="por")
 @click.option(
     "--correction-mode",
     type=click.Choice(["simple", "compound", "segmentation"]),
@@ -48,6 +49,7 @@ def parse_parameters(
     use_tesserocr,
     save,
     metrics,
+    lang,
     correction_mode,
     transform_mode,
     output,
@@ -71,7 +73,7 @@ def parse_parameters(
         image = improve_image_quality(image, output, save)
 
     # Tesseract
-    ocr_text = image_to_text(image, use_tesserocr)
+    ocr_text = image_to_text(image, lang, use_tesserocr)
 
     # Text Processing
     # Transformations
@@ -82,7 +84,9 @@ def parse_parameters(
     # Spell Checker
     if dictionary:
         transformed_ocr_text = correct_spelling(
-            transformed_ocr_text, dictionary, correction_mode
+            transformed_ocr_text,
+            dictionary,
+            correction_mode,
         )
 
     # Performance Evaluation

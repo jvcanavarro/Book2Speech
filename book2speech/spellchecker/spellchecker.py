@@ -4,18 +4,33 @@ from symspellpy import SymSpell, Verbosity
 
 def correct_spelling(text, dictionary_path, mode):
     sym_spell = SymSpell(max_dictionary_edit_distance=2, prefix_length=7)
-    sym_spell.load_dictionary(dictionary_path, 0, 1)
-    correct_text = list()
 
+    correct_text = list()
     if mode == "simple":
+        sym_spell.load_dictionary(dictionary_path, 0, 1)
         for word in text:
             suggestions = sym_spell.lookup(
                 word, Verbosity.TOP, max_edit_distance=2, include_unknown=True
             )
             correct_text.append(suggestions[0].term)
+
     elif mode == "compound":
-        pass
+        sym_spell.load_bigram_dictionary(dictionary_path, 0, 1)
+        suggestions = sym_spell.lookup_compound(" ".join(text), max_edit_distance=2)
+        correct_text = suggestions[0].term.split()
+
     elif mode == "segmentation":
-        pass
+        sym_spell.load_dictionary(dictionary_path, 0, 1)
+        suggestions = sym_spell.word_segmentation(" ".join(text), max_edit_distance=2)
+        print(suggestions.corrected_string)
+        correct_text = suggestions.corrected_string.split()
+
+    counter = 0
+    for i in range(len(text)):
+        if text[i] != correct_text[i]:
+            print(text[i], " -- ", correct_text[i])
+            counter += 1
+
+    print("Mismatches: ", counter)
 
     return correct_text
