@@ -3,5 +3,6 @@ __pycache__/
 
 data/
 dicts/
+scripts/
 results/
-icdar2015/
+icdar2015
