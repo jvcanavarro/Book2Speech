@@ -12,5 +12,6 @@ def image_to_text(image, lang, use_tesserocr):
             api.SetImageFile(image)
             text = api.GetUTF8Text()
     else:
-        text = pytesseract.image_to_string(image, lang=lang)
+        config = "-c tessedit_do_invert=0"
+        text = pytesseract.image_to_string(image, lang=lang, config=config)
     return text
