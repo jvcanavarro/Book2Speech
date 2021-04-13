@@ -18,14 +18,33 @@ def deskew(thresh):
     return rotated_image
 
 
-def improve_image_quality(image_path, output, save):
-    original_image = cv2.imread(image_path)
-    resized_image = cv2.resize(original_image, (0, 0), fx=0.5, fy=0.5)
-    gray_image = cv2.cvtColor(resized_image, cv2.COLOR_BGR2GRAY)
-    thresh = cv2.threshold(gray_image, 0, 255, cv2.THRESH_BINARY | cv2.THRESH_OTSU)[1]
-    deskewed_image = deskew(thresh)
+def improve_image_quality(
+    image_path, blur_mode, thresh_mode, deskew_image, output, save
+):
+    image = cv2.imread(image_path, 0)
+
+    if blur_mode == "average":
+        image = cv2.blur(image, (5, 5))
+    elif blur_mode == "gaussian":
+        image = cv2.GaussianBlur(image, (5, 5), 0)
+    elif blur_mode == "median":
+        image = cv2.medianBlur(image, 3)
+    elif blur_mode == "bilateral":
+        image = cv.bilateralFilter(image, 9, 75, 75)
+
+    if thresh_mode == "simple":
+        image = cv2.threshold(image, 127, 255, cv2.THRESH_BINARY)
+    elif thresh_mode == "adaptative":
+        image = cv2.adaptiveThreshold(
+            image, 255, cv2.ADAPTIVE_THRESH_GAUSSIAN_C, cv2.THRESH_BINARY, 31, 2
+        )
+    elif thresh_mode == "otsu":
+        image = cv2.threshold(image, 0, 255, cv2.THRESH_BINARY | cv2.THRESH_OTSU)[1]
+
+    if deskew_image:
+        image = deskew(image)
 
     if save:
-        cv2.imwrite(output + '.png', thresh)
+        cv2.imwrite(output + ".png", image)
 
-    return thresh
+    return image

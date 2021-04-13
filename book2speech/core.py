@@ -1,5 +1,4 @@
 import cv2
-import sys
 import click
 
 from ocr.ocr import image_to_text
@@ -20,12 +19,13 @@ from image_processing.image_processing import improve_image_quality
 @click.option("--dictionary", "-d", type=click.Path())
 @click.option("--play-audio", is_flag=True)
 @click.option("--disable-tts", is_flag=True)
-@click.option("--only-metrics", is_flag=True)
+@click.option("--deskew-image", is_flag=True)
 @click.option("--improve-image", is_flag=True)
 @click.option("--use-tesserocr", is_flag=True)
+@click.option("--verbose", "-v", is_flag=True)
 @click.option("--save-results", "-s", "save", is_flag=True)
 @click.option("--calculate-metrics", "metrics", is_flag=True)
-@click.option("--lang", "-l", type=click.Choice(["eng", "por"]), default="por")
+@click.option("--lang", type=click.Choice(["eng", "por"]), default="por")
 @click.option(
     "--correction-mode",
     type=click.Choice(["simple", "compound", "segmentation"]),
@@ -36,6 +36,20 @@ from image_processing.image_processing import improve_image_quality
     type=click.Choice(["reduced", "default", "extended"]),
     default="default",
 )
+@click.option(
+    "--blur-mode",
+    type=click.Choice(
+        ["average", "gaussian", "median", "bilateral", "disable"],
+    ),
+    default="disable",
+)
+@click.option(
+    "--thresh-mode",
+    type=click.Choice(
+        ["simple", "adaptative", "otsu", "disable"],
+    ),
+    default="otsu",
+)
 @click.option("--output", "-o", type=str, default="output")
 def parse_parameters(
     image,
@@ -44,38 +58,34 @@ def parse_parameters(
     dictionary,
     play_audio,
     disable_tts,
-    only_metrics,
+    deskew_image,
     improve_image,
     use_tesserocr,
+    verbose,
     save,
     metrics,
     lang,
     correction_mode,
     transform_mode,
+    blur_mode,
+    thresh_mode,
     output,
 ):
-    true_text = text.readlines()  # text.read().splitlines()
-
-    if only_metrics:
-        ocr_text = ocr_text.readlines()
-        transformed_true_text, transformed_ocr_text = apply_transformations(
-            ocr_text, true_text, transform_mode
-        )
-        _ = generate_metrics(transformed_true_text, transformed_ocr_text)
-        sys.exit()
-
-    # Image Capture
+    # Capture Image
     if not image:
         image = take_picture()
 
     # Image Processing
     if improve_image:
-        image = improve_image_quality(image, output, save)
+        image = improve_image_quality(
+            image, blur_mode, thresh_mode, deskew_image, output, save
+        )
 
     # Tesseract
     ocr_text = image_to_text(image, lang, use_tesserocr)
 
     # Text Processing
+    true_text = text.readlines()  # text.read().splitlines()
     # Transformations
     if dictionary or metrics:
         transformed_true_text, transformed_ocr_text = apply_transformations(
@@ -90,9 +100,8 @@ def parse_parameters(
         )
 
     # Performance Evaluation
-    # TODO: get a list of wrong words/characters
     if metrics:
-        _ = generate_metrics(transformed_true_text, transformed_ocr_text)
+        _ = generate_metrics(transformed_true_text, transformed_ocr_text, verbose)
 
     # Text to Speech
     if not disable_tts:
@@ -101,7 +110,7 @@ def parse_parameters(
     # Save Results
     if save:
         with open(output + ".txt", "w") as text_file:
-            text_file.write(ocr_text)
+            text_file.write(" ".join(transformed_ocr_text))
 
 
 if __name__ == "__main__":
