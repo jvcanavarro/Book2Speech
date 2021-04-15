@@ -6,6 +6,7 @@ from tts.tts import text_to_speech
 from camera.camera import take_picture
 from metrics.metrics import generate_metrics
 from spellchecker.spellchecker import correct_spelling
+from plot.confusion_matrix import generate_confusion_matrix
 from transformations.transformations import apply_transformations
 from image_processing.image_processing import improve_image_quality
 
@@ -15,14 +16,15 @@ from image_processing.image_processing import improve_image_quality
 @click.command()
 @click.option("--text", "-t", type=click.File())
 @click.option("--image", "-i", type=click.Path())
+@click.option("--bigram", "-b", type=click.Path())
 @click.option("--ocr-text", "-ot", type=click.File())
 @click.option("--dictionary", "-d", type=click.Path())
+@click.option("--dewarp", is_flag=True)
 @click.option("--play-audio", is_flag=True)
 @click.option("--disable-tts", is_flag=True)
-@click.option("--deskew-image", is_flag=True)
 @click.option("--improve-image", is_flag=True)
-@click.option("--use-tesserocr", is_flag=True)
 @click.option("--verbose", "-v", is_flag=True)
+@click.option("--confusion-matrix", is_flag=True)
 @click.option("--save-results", "-s", "save", is_flag=True)
 @click.option("--calculate-metrics", "metrics", is_flag=True)
 @click.option("--lang", type=click.Choice(["eng", "por"]), default="por")
@@ -46,22 +48,45 @@ from image_processing.image_processing import improve_image_quality
 @click.option(
     "--thresh-mode",
     type=click.Choice(
-        ["simple", "adaptative", "otsu", "disable"],
+        ["simple", "gaussian", "mean", "otsu", "disable"],
     ),
     default="otsu",
+)
+@click.option(
+    "--optimizer",
+    type=click.Choice(
+        [
+            "disable" "Nelder-Mead",
+            "Powell",
+            "CG",
+            "BFGS",
+            "Newton-CG",
+            "L-BFGS-B",
+            "TNC",
+            "COBYLA",
+            "SLSQP",
+            "trust-constr",
+            "dogleg",
+            "trust-ncg",
+            "trust-exact",
+            "trust-krylov",
+        ],
+    ),
+    default="disable",
 )
 @click.option("--output", "-o", type=str, default="output")
 def parse_parameters(
     image,
     text,
+    bigram,
     ocr_text,
     dictionary,
+    dewarp,
     play_audio,
     disable_tts,
-    deskew_image,
     improve_image,
-    use_tesserocr,
     verbose,
+    confusion_matrix,
     save,
     metrics,
     lang,
@@ -69,6 +94,7 @@ def parse_parameters(
     transform_mode,
     blur_mode,
     thresh_mode,
+    optimizer,
     output,
 ):
     # Capture Image
@@ -78,18 +104,18 @@ def parse_parameters(
     # Image Processing
     if improve_image:
         image = improve_image_quality(
-            image, blur_mode, thresh_mode, deskew_image, output, save
+            image, blur_mode, thresh_mode, dewarp, optimizer, output, save
         )
 
     # Tesseract
-    ocr_text = image_to_text(image, lang, use_tesserocr)
+    ocr_text = image_to_text(image, lang)
 
     # Text Processing
     true_text = text.readlines()  # text.read().splitlines()
     # Transformations
     if dictionary or metrics:
         transformed_true_text, transformed_ocr_text = apply_transformations(
-            ocr_text, true_text, transform_mode
+            true_text, ocr_text, transform_mode
         )
     # Spell Checker
     if dictionary:
@@ -101,7 +127,11 @@ def parse_parameters(
 
     # Performance Evaluation
     if metrics:
-        _ = generate_metrics(transformed_true_text, transformed_ocr_text, verbose)
+        metrics = generate_metrics(transformed_true_text, transformed_ocr_text, verbose)
+
+    # Generate Confusion Matrix
+    if confusion_matrix:
+        _ = generate_confusion_matrix(metrics)
 
     # Text to Speech
     if not disable_tts:
