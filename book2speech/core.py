@@ -1,5 +1,6 @@
 import cv2
 import click
+import constants
 
 from ocr.ocr import image_to_text
 from tts.tts import text_to_speech
@@ -30,48 +31,27 @@ from image_processing.image_processing import improve_image_quality
 @click.option("--lang", type=click.Choice(["eng", "por"]), default="por")
 @click.option(
     "--correction-mode",
-    type=click.Choice(["simple", "compound", "segmentation"]),
+    type=click.Choice(constants.CORRECTIONS),
     default="simple",
 )
 @click.option(
     "--transform-mode",
-    type=click.Choice(["reduced", "default", "extended"]),
+    type=click.Choice(constants.TRANSFORMATIONS),
     default="default",
 )
 @click.option(
     "--blur-mode",
-    type=click.Choice(
-        ["average", "gaussian", "median", "bilateral", "disable"],
-    ),
-    default="disable",
+    type=click.Choice(constants.BLURS),
+    default="gaussian",
 )
 @click.option(
     "--thresh-mode",
-    type=click.Choice(
-        ["simple", "gaussian", "mean", "otsu", "disable"],
-    ),
-    default="otsu",
+    type=click.Choice(constants.THRESHS),
+    default="disable",
 )
 @click.option(
     "--optimizer",
-    type=click.Choice(
-        [
-            "disable" "Nelder-Mead",
-            "Powell",
-            "CG",
-            "BFGS",
-            "Newton-CG",
-            "L-BFGS-B",
-            "TNC",
-            "COBYLA",
-            "SLSQP",
-            "trust-constr",
-            "dogleg",
-            "trust-ncg",
-            "trust-exact",
-            "trust-krylov",
-        ],
-    ),
+    type=click.Choice(constants.OPTIMIZERS, case_sensitive=False),
     default="disable",
 )
 @click.option("--output", "-o", type=str, default="output")
@@ -122,6 +102,7 @@ def parse_parameters(
         transformed_ocr_text = correct_spelling(
             transformed_ocr_text,
             dictionary,
+            bigram,
             correction_mode,
         )
 
