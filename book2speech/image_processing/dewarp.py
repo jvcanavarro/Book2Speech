@@ -18,9 +18,8 @@ import datetime
 import time
 
 # for some reason pylint complains about cv2 members being undefined :(
-# pylint: disable=E1101
 
-PAGE_MARGIN_X = 0  # reduced px to ignore near L/R edge
+PAGE_MARGIN_X = 30  # reduced px to ignore near L/R edge
 PAGE_MARGIN_Y = 0  # reduced px to ignore near T/B edge
 
 OUTPUT_ZOOM = 1.0  # how much to zoom output relative to *original* image
@@ -32,7 +31,7 @@ ADAPTIVE_WINSZ = 55  # window size for adaptive threshold in reduced px
 TEXT_MIN_WIDTH = 15  # min reduced px width of detected text contour
 TEXT_MIN_HEIGHT = 2  # min reduced px height of detected text contour
 TEXT_MIN_ASPECT = 1.5  # filter out text contours below this w/h ratio
-TEXT_MAX_THICKNESS = 10  # max reduced px thickness of detected text contour
+TEXT_MAX_THICKNESS = 6  # max reduced px thickness of detected text contour
 
 EDGE_MAX_OVERLAP = 1.0  # max reduced px horiz. overlap of contours in span
 EDGE_MAX_LENGTH = 100.0  # max reduced px length of edge connecting contours
@@ -297,6 +296,8 @@ def get_mask(name, small, pagemask, masktype):
             ADAPTIVE_WINSZ,
             25,
         )
+
+        # mask = cv2.threshold(sgray, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU, 25)[1]
 
         if DEBUG_LEVEL >= 3:
             debug_show(name, 0.1, "thresholded", mask)
@@ -761,19 +762,37 @@ def optimize_params(name, small, dstpoints, span_counts, params, optimizer):
         ppts = project_keypoints(pvec, keypoint_index)
         return np.sum((dstpoints - ppts) ** 2)
 
-    print("  initial objective is", objective(params))
+    print("Initial objective is", objective(params))
 
     if DEBUG_LEVEL >= 1:
         projpts = project_keypoints(params, keypoint_index)
         display = draw_correspondences(small, dstpoints, projpts)
         debug_show(name, 4, "keypoints before", display)
 
-    print("  optimizing", len(params), "parameters...")
+    print("Optimizing", len(params), "parameters...")
     start = datetime.datetime.now()
-    res = scipy.optimize.minimize(objective, params, method=optimizer)
+
+    jac_algos = (
+        "cg",
+        "newton-cg",
+        "tnc",
+        "slsqp",
+        "dogleg",
+        "trust-ncg",
+        "trust-krylov",
+        "trust-exact",
+        "trust-constr",
+    )
+
+    if optimizer.lower() in jac_algos:
+        jac = lambda x: scipy.optimize.approx_fprime(params, objective, 0.01)
+        res = scipy.optimize.minimize(objective, params, method=optimizer, jac=jac)
+    else:
+        res = scipy.optimize.minimize(objective, params, method=optimizer)
+
     end = datetime.datetime.now()
-    print("  optimization took", round((end - start).total_seconds(), 2), "sec.")
-    print("  final objective is", res.fun)
+    print("Optimization took", round((end - start).total_seconds(), 2), "sec.")
+    print("Final objective is", res.fun)
     params = res.x
 
     if DEBUG_LEVEL >= 1:
@@ -853,12 +872,12 @@ def remap_image(name, img, small, page_dims, params, save):
         cv2.BORDER_REPLICATE,
     )
 
-    thresh = cv2.adaptiveThreshold(
-        remapped, 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY, ADAPTIVE_WINSZ, 25
-    )
+    # remapped = cv2.adaptiveThreshold(
+    #     remapped, 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY, ADAPTIVE_WINSZ, 25
+    # )
 
     if save:
-        pil_image = Image.fromarray(thresh)
+        pil_image = Image.fromarray(remapped)
         pil_image = pil_image.convert("1")
 
         threshfile = name + "_dewarp.jpg"
@@ -870,7 +889,7 @@ def remap_image(name, img, small, page_dims, params, save):
         display = cv2.resize(thresh, (width, height), interpolation=cv2.INTER_AREA)
         debug_show(name, 6, "output", display)
 
-    return thresh
+    return remapped
 
 
 def dewarp_image(image_path, optimizer, save):
@@ -883,8 +902,8 @@ def dewarp_image(image_path, optimizer, save):
     basename = os.path.basename(image_path)
     name, _ = os.path.splitext(basename)
 
-    # print('loaded', basename, 'with size', imgsize(img),)
-    # print('and resized to', imgsize(small))
+    # print("loaded", basename, "with size", imgsize(image))
+    # print("and resized to", imgsize(small))
 
     if DEBUG_LEVEL >= 3:
         debug_show(name, 0.0, "original", small)
@@ -895,21 +914,24 @@ def dewarp_image(image_path, optimizer, save):
     spans = assemble_spans(name, small, pagemask, cinfo_list)
 
     if len(spans) < 3:
-        # print('  detecting lines because only', len(spans), 'text spans')
+        # print("  detecting lines because only", len(spans), "text spans")
         cinfo_list = get_contours(name, small, pagemask, "line")
         spans2 = assemble_spans(name, small, pagemask, cinfo_list)
         if len(spans2) > len(spans):
             spans = spans2
 
     if len(spans) < 1:
-        # print('skipping', name, 'because only', len(spans), 'spans')
-        # continue
+        # print("skipping", name, "because only", len(spans), "spans")
         pass
 
     span_points = sample_spans(small.shape, spans)
 
-    # print('  got', len(spans), 'spans',)
-    # print('with', sum([len(pts) for pts in span_points]), 'points.')
+    # print(
+    #     "  got",
+    #     len(spans),
+    #     "spans",
+    # )
+    # print("with", sum([len(pts) for pts in span_points]), "points.")
 
     corners, ycoords, xcoords = keypoints_from_samples(
         name, small, pagemask, page_outline, span_points
@@ -926,9 +948,8 @@ def dewarp_image(image_path, optimizer, save):
 
     page_dims = get_page_dims(corners, rough_dims, params)
 
-    dewarped_image = remap_image(name, image, small, page_dims, params, save)
+    remapped_image = remap_image(name, image, small, page_dims, params, save)
 
-    # print('  wrote', outfile)
-    # print('to convert to PDF (requires ImageMagick):')
-    # print('  convert -compress Group4 ' + ' '.join(outfiles) + ' output.pdf')
-    return dewarped_image
+    # cv2.imshow("remmapped", remapped_image)
+    # cv2.waitKey(0)
+    return remapped_image
