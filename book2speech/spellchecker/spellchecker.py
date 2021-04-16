@@ -17,11 +17,13 @@ def correct_spelling(text, dictionary_path, bigram_path, mode):
         correct_text = suggestions[0].term.split()
 
     elif mode == "segmentation":
-        suggestions = sym_spell.word_segmentation(" ".join(text), max_edit_distance=2)
+        sym_spell = SymSpell(max_dictionary_edit_distance=0, prefix_length=7)
+        sym_spell.load_dictionary(dictionary_path, 0, 1)
+        suggestions = sym_spell.word_segmentation(" ".join(text), max_edit_distance=0)
         correct_text = suggestions[0].split()
 
     elif mode == "compound":
-        sym_spell.load_bigram_dictionary(dictionary_path, 0, 1)
+        sym_spell.load_bigram_dictionary(dictionary_path, 0, 2)
         suggestions = sym_spell.lookup_compound(" ".join(text), max_edit_distance=2)
         correct_text = suggestions[0].term.split()
 
