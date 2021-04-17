@@ -112,7 +112,7 @@ def parse_parameters(
 
     # Generate Confusion Matrix
     if confusion_matrix:
-        _ = generate_confusion_matrix(metrics)
+        _ = generate_confusion_matrix(metrics, verbose)
 
     # Text to Speech
     if not disable_tts:

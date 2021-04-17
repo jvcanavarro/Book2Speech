@@ -1,39 +1,47 @@
 import matplotlib.pyplot as plt
-from collections import defaultdict
+import seaborn as sn
+import pandas as pd
+
+from sklearn.metrics import plot_confusion_matrix
+from sklearn.metrics import confusion_matrix
 
 
-def calculate_edits(metrics):
+def generate_confusion_matrix(metrics, verbose):
     truth = metrics["truth"]
     hypothesis = metrics["hypothesis"]
+    aux = list(truth)
 
     true = []
     pred = []
-    for edit in metrics["editops"]:
 
+    for edit in metrics["editops"]:
         if edit[0] == "insert":
-            # print(edit[0])
-            # print(truth[edit[1]])
-            # print(hypothesis[edit[2]])
             true.append(truth[edit[1]])
             pred.append("_")
 
         elif edit[0] == "replace":
-            # print(edit[0])
-            # print(truth[edit[1]])
-            # print(hypothesis[edit[2]])
             true.append(truth[edit[1]])
             pred.append(hypothesis[edit[2]])
+            aux.pop(edit[2])
 
         elif edit[0] == "delete":
-            # print(edit[0])
-            # print(truth[edit[1]])
-            # print(hypothesis[edit[2]])
             true.append("_")
             pred.append(hypothesis[edit[2]])
+            aux.pop(edit[2])
 
-    print(true)
-    print(pred)
+    true += aux
+    pred += aux
 
+    if not verbose:
+        print(metrics["editops"])
+        print()
+        print("".join(true))
+        print("".join(pred))
 
-def generate_confusion_matrix(metrics):
-    _ = calculate_edits(metrics)
+    cmatrix = confusion_matrix(true, pred, normalize='all')
+    print("\n", cmatrix)
+    index = sorted(set(truth + hypothesis + "_"))
+    df_cm = pd.DataFrame(cmatrix, index=index, columns=index)
+    plt.figure(figsize=(10, 7))
+    sn.heatmap(df_cm, annot=True)
+    plt.show()
