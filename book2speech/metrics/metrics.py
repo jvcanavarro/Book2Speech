@@ -19,6 +19,7 @@ def generate_metrics(ground_truth, hypothesis, verbose):
         print("Truth: {}".format(metrics["truth"]))
         print()
         print("Hypothesis: {}".format(metrics["hypothesis"]))
+    print()
         
 
     return metrics
