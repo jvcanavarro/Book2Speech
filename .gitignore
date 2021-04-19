@@ -3,6 +3,8 @@ __pycache__/
 
 data/
 dicts/
-scripts/
+pre_results/
 results/
+
 icdar2015
+image_list
