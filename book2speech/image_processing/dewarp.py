@@ -8,14 +8,15 @@
 # License: MIT License (see LICENSE.txt)
 ######################################################################
 
-import cv2
-from PIL import Image
-import numpy as np
-import scipy.optimize
 import os
 import sys
-import datetime
 import time
+import datetime
+
+import cv2
+import numpy as np
+import scipy.optimize
+from PIL import Image
 
 # for some reason pylint complains about cv2 members being undefined :(
 
@@ -762,7 +763,7 @@ def optimize_params(name, small, dstpoints, span_counts, params, optimizer):
         ppts = project_keypoints(pvec, keypoint_index)
         return np.sum((dstpoints - ppts) ** 2)
 
-    print("Initial objective is", objective(params))
+    # print("Initial objective is", objective(params))
 
     if DEBUG_LEVEL >= 1:
         projpts = project_keypoints(params, keypoint_index)
@@ -792,7 +793,7 @@ def optimize_params(name, small, dstpoints, span_counts, params, optimizer):
 
     end = datetime.datetime.now()
     print("Optimization took", round((end - start).total_seconds(), 2), "sec.")
-    print("Final objective is", res.fun)
+    # print("Final objective is", res.fun)
     params = res.x
 
     if DEBUG_LEVEL >= 1:
@@ -942,7 +943,6 @@ def dewarp_image(image_path, optimizer, save):
     dstpoints = np.vstack((corners[0].reshape((1, 1, 2)),) + tuple(span_points))
 
     # Warning: high CPU usage
-
     if optimizer != "disable":
         params = optimize_params(name, small, dstpoints, span_counts, params, optimizer)
 
@@ -950,6 +950,4 @@ def dewarp_image(image_path, optimizer, save):
 
     remapped_image = remap_image(name, image, small, page_dims, params, save)
 
-    # cv2.imshow("remmapped", remapped_image)
-    # cv2.waitKey(0)
     return remapped_image
