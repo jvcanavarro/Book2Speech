@@ -6,12 +6,19 @@ from sklearn.metrics import plot_confusion_matrix
 from sklearn.metrics import confusion_matrix
 
 
+def plot_matrix(cmatrix, index):
+    df = pd.DataFrame(cmatrix, index=index, columns=index)
+
+    plt.figure(figsize=(10, 10))
+    sn.heatmap(df, cmap="Pastel1_r", linewidths=0.5)
+    plt.show()
+
+
 def generate_confusion_matrix(metrics, verbose):
     truth = metrics["truth"]
     hypothesis = metrics["hypothesis"]
 
     aux = list(hypothesis)
-
     true = []
     pred = []
 
@@ -21,7 +28,6 @@ def generate_confusion_matrix(metrics, verbose):
             pred.append("_")
 
         elif edit[0] == "replace":
-
             true.append(truth[edit[2]])
             pred.append(hypothesis[edit[1]])
             aux.pop(edit[2])
@@ -31,20 +37,16 @@ def generate_confusion_matrix(metrics, verbose):
             pred.append(hypothesis[edit[1]])
             aux.pop(edit[2])
 
+    if verbose:
+        print(f"True: {''.join(true)}")
+        print(f"Pred: {''.join(pred)}")
+
     true += aux
     pred += aux
 
-    if verbose verbose:
-        print(metrics["editops"])
-        print()
-        print("".join(true))
-        print("".join(pred))
-
-    index = sorted(set(truth + hypothesis + ""))
     cmatrix = confusion_matrix(true, pred, normalize="pred")
+    index = sorted(set(truth + hypothesis + "_"))
 
-    df = pd.DataFrame(cmatrix, index=index, columns=index)
+    plot_matrix(cmatrix, index)
 
-    plt.figure(figsize=(10, 10))
-    sn.heatmap(df) 
-    plt.show()
+    return cmatrix
