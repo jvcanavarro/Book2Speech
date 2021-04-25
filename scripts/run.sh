@@ -8,10 +8,10 @@ bigram="../dicts/en_bi_242k.txt"
 
 core="python ../book2speech/core.py"
 
-trm="--transform-mode"
 cm="--correction-mode"
 tm="--thresh-mode"
 bm="--blur-mode"
+trm="--transform-mode"
 
 flags="--disable-tts --calculate-metrics --debug $trm=extended"
 
