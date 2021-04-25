@@ -13,7 +13,7 @@ def blur_image(image, blur_mode):
     elif blur_mode == "median":
         image = cv2.medianBlur(image, 3)
     elif blur_mode == "bilateral":
-        image = cv.bilateralFilter(image, 9, 75, 75)
+        image = cv2.bilateralFilter(image, 9, 75, 75)
 
     return image
 
