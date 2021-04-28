@@ -21,3 +21,21 @@ OPTIMIZERS = [
     "trust-krylov",
     "disable",
 ]
+
+KEYS = [
+    "image_path",
+    "dictionary",
+    "bigram",
+    "lang",
+    "correction_mode",
+    "improve_image",
+    "thresh_mode",
+    "blur_mode",
+    "dewarp",
+    "optimizer",
+    "transform_mode",
+    "time",
+    # "ellapsed",
+]
+
+METRICS = ["wer", "mer", "wil", "wip"]
