@@ -1,4 +1,5 @@
 import cv2
+import time
 import click
 import constants
 
@@ -15,20 +16,21 @@ from image_processing.image_processing import improve_image_quality
 
 
 @click.command()
-@click.option("--text", "-t", type=click.File())
+@click.option("--text", "-t", type=click.Path())
 @click.option("--image", "-i", type=click.Path())
 @click.option("--bigram", "-b", type=click.Path())
-@click.option("--ocr-text", "-ot", type=click.File())
 @click.option("--dictionary", "-d", type=click.Path())
 @click.option("--dewarp", is_flag=True)
 @click.option("--play-audio", is_flag=True)
 @click.option("--disable-tts", is_flag=True)
 @click.option("--improve-image", is_flag=True)
 @click.option("--verbose", "-v", is_flag=True)
+@click.option("--debug", "debug", is_flag=True)
 @click.option("--confusion-matrix", is_flag=True)
-@click.option("--save-results", "-s", "save", is_flag=True)
+@click.option("--bound-box", "bbox", is_flag=True)
 @click.option("--calculate-metrics", "metrics", is_flag=True)
-@click.option("--lang", type=click.Choice(["eng", "por"]), default="por")
+@click.option("--save-results", "-s", "save", is_flag=True)
+@click.option("--lang", type=click.Choice(["eng", "por"]), default="eng")
 @click.option(
     "--correction-mode",
     type=click.Choice(constants.CORRECTIONS),
@@ -42,7 +44,7 @@ from image_processing.image_processing import improve_image_quality
 @click.option(
     "--blur-mode",
     type=click.Choice(constants.BLURS),
-    default="gaussian",
+    default="disable",
 )
 @click.option(
     "--thresh-mode",
@@ -59,16 +61,17 @@ def parse_parameters(
     image,
     text,
     bigram,
-    ocr_text,
     dictionary,
     dewarp,
     play_audio,
     disable_tts,
     improve_image,
     verbose,
+    debug,
     confusion_matrix,
-    save,
+    bbox,
     metrics,
+    save,
     lang,
     correction_mode,
     transform_mode,
@@ -77,9 +80,12 @@ def parse_parameters(
     optimizer,
     output,
 ):
+    start = time.time()
+
     # Capture Image
     if not image:
         image = take_picture()
+    image_path = image
 
     # Image Processing
     if improve_image:
@@ -88,10 +94,10 @@ def parse_parameters(
         )
 
     # Tesseract
-    ocr_text = image_to_text(image, lang)
+    ocr_text = image_to_text(image, lang, bbox)
 
     # Text Processing
-    true_text = text.readlines()  # text.read().splitlines()
+    true_text = open(text).readlines()  # text.read().splitlines()
     # Transformations
     if dictionary or metrics:
         transformed_true_text, transformed_ocr_text = apply_transformations(
@@ -106,6 +112,9 @@ def parse_parameters(
             correction_mode,
         )
 
+    end = time.time()
+    ellapsed = end - start
+
     # Performance Evaluation
     if metrics:
         metrics = generate_metrics(transformed_true_text, transformed_ocr_text, verbose)
@@ -117,6 +126,18 @@ def parse_parameters(
     # Text to Speech
     if not disable_tts:
         text_to_speech(transformed_ocr_text, output, play_audio)
+
+    # Save locals to file
+    if debug:
+        vals = []
+        for key in constants.KEYS:
+            vals.append(locals()[key])
+        for metric in constants.METRICS:
+            vals.append(metrics[metric])
+        vals.append("\n")
+
+        with open("../results/results", "a") as result:
+            result.write(",".join(str(val) for val in vals))
 
     # Save Results
     if save:
