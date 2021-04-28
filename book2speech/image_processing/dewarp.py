@@ -770,7 +770,7 @@ def optimize_params(name, small, dstpoints, span_counts, params, optimizer):
         display = draw_correspondences(small, dstpoints, projpts)
         debug_show(name, 4, "keypoints before", display)
 
-    print("Optimizing", len(params), "parameters...")
+    # print("Optimizing", len(params), "parameters...")
     start = datetime.datetime.now()
 
     jac_algos = (
@@ -792,7 +792,7 @@ def optimize_params(name, small, dstpoints, span_counts, params, optimizer):
         res = scipy.optimize.minimize(objective, params, method=optimizer)
 
     end = datetime.datetime.now()
-    print("Optimization took", round((end - start).total_seconds(), 2), "sec.")
+    # print("Optimization took", round((end - start).total_seconds(), 2), "sec.")
     # print("Final objective is", res.fun)
     params = res.x
 
@@ -915,15 +915,15 @@ def dewarp_image(image_path, optimizer, save):
     spans = assemble_spans(name, small, pagemask, cinfo_list)
 
     if len(spans) < 3:
-        # print("  detecting lines because only", len(spans), "text spans")
+        # print("Detecting lines because only", len(spans), "text spans")
         cinfo_list = get_contours(name, small, pagemask, "line")
         spans2 = assemble_spans(name, small, pagemask, cinfo_list)
         if len(spans2) > len(spans):
             spans = spans2
 
     if len(spans) < 1:
-        # print("skipping", name, "because only", len(spans), "spans")
-        pass
+        # print("Skipping", name, "because only", len(spans), "spans")
+        return cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
     span_points = sample_spans(small.shape, spans)
 
