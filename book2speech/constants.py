@@ -34,8 +34,8 @@ KEYS = [
     "dewarp",
     "optimizer",
     "transform_mode",
-    "time",
-    # "ellapsed",
+    # "time",
+    "ellapsed",
 ]
 
 METRICS = ["wer", "mer", "wil", "wip"]

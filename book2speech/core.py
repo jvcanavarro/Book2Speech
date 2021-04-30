@@ -27,7 +27,6 @@ from image_processing.image_processing import improve_image_quality
 @click.option("--verbose", "-v", is_flag=True)
 @click.option("--debug", "debug", is_flag=True)
 @click.option("--confusion-matrix", is_flag=True)
-@click.option("--bound-box", "bbox", is_flag=True)
 @click.option("--calculate-metrics", "metrics", is_flag=True)
 @click.option("--save-results", "-s", "save", is_flag=True)
 @click.option("--lang", type=click.Choice(["eng", "por"]), default="eng")
@@ -69,7 +68,6 @@ def parse_parameters(
     verbose,
     debug,
     confusion_matrix,
-    bbox,
     metrics,
     save,
     lang,
@@ -94,7 +92,7 @@ def parse_parameters(
         )
 
     # Tesseract
-    ocr_text = image_to_text(image, lang, bbox)
+    ocr_text = image_to_text(image, lang)
 
     # Text Processing
     true_text = open(text).readlines()  # text.read().splitlines()
