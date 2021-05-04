@@ -2,10 +2,11 @@
 __pycache__/
 .ipynb_checkpoints/
 
+egs/
 data/
 dicts/
-pre_results/
 results/
+pre_results/
 
 icdar2015
 image_list
