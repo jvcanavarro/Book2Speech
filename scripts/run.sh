@@ -18,6 +18,7 @@ flags="--disable-tts --calculate-metrics --debug $trm=extended"
 while read image
 do
     text="$(basename $image .jpg).txt"
+    echo $image
 
     cmd="$core -i $image -t $tdir/$text $flags"
     eval $cmd

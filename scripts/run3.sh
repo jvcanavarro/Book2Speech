@@ -17,9 +17,9 @@ do
     echo $image
 
     # Thresh + Blur
-    cmd="$core -i $image -t $tdir/$text --improve-image $tm=mean $bm=gaussian $flags"
+    cmd="$core -i $image -t $tdir/$text --improve-image $tm=simple $bm=gaussian $flags"
     eval $cmd
-    cmd="$core -i $image -t $tdir/$text --improve-image $tm=mean $bm=median $flags"
+    cmd="$core -i $image -t $tdir/$text --improve-image $tm=simple $bm=median $flags"
     eval $cmd
     cmd="$core -i $image -t $tdir/$text --improve-image $tm=otsu $bm=gaussian $flags"
     eval $cmd
@@ -28,11 +28,11 @@ do
 
 
     # Thresh + Dewarp
-    cmd="$core -i $image -t $tdir/$text --improve-image $tm=mean --dewarp $flags"
+    cmd="$core -i $image -t $tdir/$text --improve-image $tm=simple --dewarp $flags"
     eval $cmd
-    cmd="$core -i $image -t $tdir/$text --improve-image $tm=mean --dewarp --optimizer=Powell $flags"
+    cmd="$core -i $image -t $tdir/$text --improve-image $tm=simple --dewarp --optimizer=Powell $flags"
     eval $cmd
-    cmd="$core -i $image -t $tdir/$text --improve-image $tm=mean --dewarp --optimizer=L-BFGS-B $flags"
+    cmd="$core -i $image -t $tdir/$text --improve-image $tm=simple --dewarp --optimizer=L-BFGS-B $flags"
     eval $cmd
     cmd="$core -i $image -t $tdir/$text --improve-image $tm=otsu --dewarp $flags"
     eval $cmd
@@ -58,17 +58,17 @@ do
 
 
     # Thresh + Blur + Dewarp
-    cmd="$core -i $image -t $tdir/$text --improve-image $tm=mean $bm=gaussian --dewarp $flags"
+    cmd="$core -i $image -t $tdir/$text --improve-image $tm=simple $bm=gaussian --dewarp $flags"
     eval $cmd
-    cmd="$core -i $image -t $tdir/$text --improve-image $tm=mean $bm=gaussian --dewarp --optimizer=Powell $flags"
+    cmd="$core -i $image -t $tdir/$text --improve-image $tm=simple $bm=gaussian --dewarp --optimizer=Powell $flags"
     eval $cmd
-    cmd="$core -i $image -t $tdir/$text --improve-image $tm=mean $bm=gaussian --dewarp --optimizer=L-BFGS-B $flags"
+    cmd="$core -i $image -t $tdir/$text --improve-image $tm=simple $bm=gaussian --dewarp --optimizer=L-BFGS-B $flags"
     eval $cmd
-    cmd="$core -i $image -t $tdir/$text --improve-image $tm=mean $bm=median --dewarp $flags"
+    cmd="$core -i $image -t $tdir/$text --improve-image $tm=simple $bm=median --dewarp $flags"
     eval $cmd
-    cmd="$core -i $image -t $tdir/$text --improve-image $tm=mean $bm=median --dewarp --optimizer=Powell $flags"
+    cmd="$core -i $image -t $tdir/$text --improve-image $tm=simple $bm=median --dewarp --optimizer=Powell $flags"
     eval $cmd
-    cmd="$core -i $image -t $tdir/$text --improve-image $tm=mean $bm=median --dewarp --optimizer=L-BFGS-B $flags"
+    cmd="$core -i $image -t $tdir/$text --improve-image $tm=simple $bm=median --dewarp --optimizer=L-BFGS-B $flags"
     eval $cmd
     cmd="$core -i $image -t $tdir/$text --improve-image $tm=otsu $bm=gaussian --dewarp $flags"
     eval $cmd
