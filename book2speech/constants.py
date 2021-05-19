@@ -1,8 +1,8 @@
 TRANSFORMATIONS = ["reduced", "default", "extended"]
-CORRECTIONS = ["simple", "compound", "segmentation"]
+CORRECTIONS = ["direct", "compound", "segmentation"]
 
-THRESHS = ["simple", "gaussian", "mean", "otsu", "disable"]
-BLURS = ["average", "gaussian", "median", "bilateral", "disable"]
+THRESHS = ["global", "otsu", "mean", "gaussian", "disable"]
+BLURS = ["average", "median", "gaussian", "bilateral", "disable"]
 
 OPTIMIZERS = [
     "Nelder-Mead",
