@@ -2,12 +2,12 @@ from itertools import islice
 from symspellpy import SymSpell, Verbosity
 
 
-def correct_spelling(text, dictionary_path, bigram_path, mode):
+def correct_spelling(text, monogram_path, bigram_path, mode):
     sym_spell = SymSpell(max_dictionary_edit_distance=2, prefix_length=7)
     sym_spell.load_dictionary(dictionary_path, 0, 1)
 
     correct_text = []
-    if mode == "simple":
+    if mode == "direct":
         suggestions = sym_spell.lookup(
             " ".join(text),
             verbosity=Verbosity.TOP,

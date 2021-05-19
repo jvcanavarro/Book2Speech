@@ -2,7 +2,7 @@
 
 tdir="../icdar2015/texts"
 list="image_list"
-dict="../dicts/en_80k.txt"
+monogram="../dicts/en_80k.txt"
 bigram="../dicts/en_bi_242k.txt"
 
 
@@ -25,18 +25,18 @@ do
 
     # Spell Checking
 
-    cmd="$core -i $image -t $tdir/$text -d $dict $cm=simple $flags"
+    cmd="$core -i $image -t $tdir/$text -m $monogram $cm=direct $flags"
     eval $cmd
 
-    cmd="$core -i $image -t $tdir/$text -d $dict $cm=segmentation $flags"
+    cmd="$core -i $image -t $tdir/$text -m $monogram $cm=segmentation $flags"
     eval $cmd
 
-    cmd="$core -i $image -t $tdir/$text -d $dict -b $bigram $cm=compound $flags"
+    cmd="$core -i $image -t $tdir/$text -m $monogram -b $bigram $cm=compound $flags"
     eval $cmd
 
     # Image Processing
     ## Threshold
-    cmd="$core -i $image -t $tdir/$text --improve-image $tm=simple $flags"
+    cmd="$core -i $image -t $tdir/$text --improve-image $tm=global $flags"
     eval $cmd
 
     cmd="$core -i $image -t $tdir/$text --improve-image $tm=gaussian $flags"

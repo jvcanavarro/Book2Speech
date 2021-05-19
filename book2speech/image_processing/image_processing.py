@@ -19,7 +19,7 @@ def blur_image(image, blur_mode):
 
 
 def thresh_image(image, thresh_mode):
-    if thresh_mode == "simple":
+    if thresh_mode == "global":
         image = cv2.threshold(image, 127, 255, cv2.THRESH_BINARY)[1]
     elif thresh_mode == "gaussian":
         image = cv2.adaptiveThreshold(

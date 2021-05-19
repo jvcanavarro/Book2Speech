@@ -19,7 +19,7 @@ from image_processing.image_processing import improve_image_quality
 @click.option("--text", "-t", type=click.Path())
 @click.option("--image", "-i", type=click.Path())
 @click.option("--bigram", "-b", type=click.Path())
-@click.option("--dictionary", "-d", type=click.Path())
+@click.option("--monogram", "-m", type=click.Path())
 @click.option("--dewarp", is_flag=True)
 @click.option("--play-audio", is_flag=True)
 @click.option("--disable-tts", is_flag=True)
@@ -33,7 +33,7 @@ from image_processing.image_processing import improve_image_quality
 @click.option(
     "--correction-mode",
     type=click.Choice(constants.CORRECTIONS),
-    default="simple",
+    default="direct",
 )
 @click.option(
     "--transform-mode",
@@ -60,7 +60,7 @@ def parse_parameters(
     image,
     text,
     bigram,
-    dictionary,
+    monogram,
     dewarp,
     play_audio,
     disable_tts,
@@ -97,15 +97,15 @@ def parse_parameters(
     # Text Processing
     true_text = open(text).readlines()  # text.read().splitlines()
     # Transformations
-    if dictionary or metrics:
+    if monogram or metrics:
         transformed_true_text, transformed_ocr_text = apply_transformations(
             true_text, ocr_text, transform_mode
         )
     # Spell Checker
-    if dictionary:
+    if monogram:
         transformed_ocr_text = correct_spelling(
             transformed_ocr_text,
-            dictionary,
+            monogram,
             bigram,
             correction_mode,
         )
