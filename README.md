@@ -1,4 +1,4 @@
-# Book2Speech
+# Book2Speech: an Automatic Reading Machine for the Blinds
 
 ## Downloado Brazilian Portuguese Mono Frequency Words Dictionaries
 
