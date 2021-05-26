@@ -2,8 +2,7 @@
 __pycache__/
 .ipynb_checkpoints/
 
-egs/
+tifs/
 dicts/
-pre_results/
 
 icdar2015
