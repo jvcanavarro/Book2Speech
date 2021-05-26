@@ -1,0 +1,36 @@
+aos grupos identificados. Para priorizar os itens, podemos pedir que cada participan
+te marque com três asteriscos o item que julgar mais importante, dois asteriscos o
+segundo mais importante e um único asterisco o terceiro item mais importante para ele.
+A principal vantagem da utilização de diagramas de afinidade é assegurar a opor
+tunidade de cada participante em expressar suas ideias, o que pode não ocorrer numa
+sessão de brainstorming em que alguns participantes sejam bem mais extrovertidos
+ou agressivos do que outros.
+Na preparação para a análise, itens semelhantes devem ser agrupados. Itens repe
+tidos de um mesmo participante devem ser contabilizados apenas uma vez. Para cada
+item, devemos determinar a porcentagem de participantes que o escolheu. Os dados
+de múltiplas sessões devem ser analisados em dois momentos: examinando cada ses
+são individualmente, e depois combinando os dados de todas as sessões.
+Devemos comparar os itens que foram priorizados pelos participantes com os
+itens que constem na especificação funcional do produto, caso haja. Em geral os itens
+priorizados pelos participantes devem ser priorizados pela equipe de design do pro
+duto. Caso surjam sugestões inesperadas, podemos voltar ao registro de áudio da
+sessão e rever a discussão sobre esses itens, para identificar por que os participantes
+os julgaram importantes.
+É importante observar que algumas sugestões podem parecer tão óbvias aos par
+ticipantes que eles não as mencionam. Por exemplo, num sistema de comércio eletrô
+nico, é possível que ninguém mencione “preço do produto como um item de infor
+mação desejado, assumindo que isso seja óbvio. Como em qualquer outra técnica, é
+importante considerar também o conhecimento que a equipe de design já adquiriu
+sobre o domínio, os usuários e o resultado de outras atividades de levantamento e
+análise ao interpretar os dados coletados.
+O resultado da análise também pode ajudar a reduzir a lista de funcionalidades
+especificadas para o produto. Em vez de empregar tempo e recursos para projetar
+e desenvolver uma funcionalidade que nunca foi mencionada pelos participantes,
+devemos questionar a necessidade dessa funcionalidade ou até mesmo planejar um
+novo estudo para esclarecer a discrepância entre as expectativas da equipe de projeto
+e as dos usuários finais.
+Em geral, os resultados de uma análise de desejos e necessidades dos usuários
+são sumarizados em uma tabela com item ou categoria exemplos do item ou catego
+ria, obtidos dos exemplos que os próprios participantes forneceram; porcentagem de
+participantes que selecionaram o item como um dos cinco itens prioritários. A tabela
+deve ser ordenada por prioridade, da maior para a menor. Além disso, a lista completa
