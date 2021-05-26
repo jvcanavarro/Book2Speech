@@ -34,7 +34,6 @@ KEYS = [
     "dewarp",
     "optimizer",
     "transform_mode",
-    # "time",
     "ellapsed",
 ]
 
