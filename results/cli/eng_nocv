@@ -1,0 +1,38 @@
+﻿1  --  of
+bal  --  al
+ance  --  once
+lewin  --  lewis
+festinger  --  stinger
+heider  --  header
+hovland  --  holland
+hewes  --  ewes
+planalp  --  planar
+roloff  --  roof
+burgoon  --  burgeon
+“these  --  these
+decades”  --  decades
+calabrese  --  calaboose
+1  --  a
+commu  --  comm
+nication  --  nation
+urt  --  art
+calabrese  --  calaboose
+heider  --  header
+calabrese  --  calaboose
+“number  --  number
+interactant  --  interacting
+behave”  --  behave
+pre  --  are
+“uncertainty  --  uncertainty
+say”  --  say
+“too  --  too
+Mismatches:  28
+WER: 8.95%
+CER: 8.91%
+WIL: 16.53%
+WIP: 83.47%
+---------------
+Hits: 603
+Substitutions: 55
+Deletions: 1
+Insertions: 3

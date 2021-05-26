@@ -1,0 +1,11 @@
+time python core.py -i ../data/images/book.jpg  -t ../data/texts/book_true.txt  --calculate-metrics --transformation=extended --disable-tts > extended
+
+WER: 13.54%
+CER: 13.09%
+WIL: 15.50%
+WIP: 84.50%
+---------------
+Hits: 312
+Substitutions: 8
+Deletions: 27
+Insertions: 12

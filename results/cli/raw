@@ -1,0 +1,11 @@
+time python core.py -i ../data/images/book.jpg  -t ../data/texts/book_true.txt  --calculate-metrics --transformation=default --disable-tts > default
+
+WER: 26.14%
+CER: 24.09%
+WIL: 32.97%
+WIP: 67.03%
+---------------
+Hits: 271
+Substitutions: 34
+Deletions: 24
+Insertions: 28
