@@ -16,6 +16,9 @@ $ cd Book2Speech/
 $ pip install -r requirements.txt
 ```
 
+Book2Speech uses a modified version of the [JiWER package](https://github.com/jitsi/jiwer/) in order to calculate the error rate metrics as well as to perform the text tokenization. This modified package is available at [this repository](https://github.com/jvcanavarro/jiwer), follow the installation instruction present in the documentation.
+
+
 ## Folders
 
 `book2speech` : B2S modules and argument parser implementation.\
