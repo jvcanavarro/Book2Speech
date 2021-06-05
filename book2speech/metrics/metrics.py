@@ -14,13 +14,13 @@ def generate_metrics(ground_truth, hypothesis, verbose):
     print("Substitutions: {}".format(metrics["substitutions"]))
     print("Deletions: {}".format(metrics["deletions"]))
     print("Insertions: {}".format(metrics["insertions"]))
-    # if verbose:
-    #     print("-" * 15)
-    #     print("Truth: {}".format(metrics["truth"]))
-    #     print()
-    #     print("Hypothesis: {}".format(metrics["hypothesis"]))
-        # print()
-        # print("Edit Operations: {}".format(metrics["editops"]))
+    if verbose:
+        print("-" * 15)
+        print("Truth: {}".format(metrics["truth"]))
+        print()
+        print("Hypothesis: {}".format(metrics["hypothesis"]))
+        print()
+        print("Edit Operations: {}".format(metrics["editops"]))
     print()
 
     return metrics
