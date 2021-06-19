@@ -97,8 +97,7 @@ def parse_parameters(
     # Text Processing
     true_text = open(text).readlines()  # text.read().splitlines()
     # Transformations
-    if monogram or metrics:
-        transformed_true_text, transformed_ocr_text = apply_transformations(
+    transformed_true_text, transformed_ocr_text = apply_transformations(
             true_text, ocr_text, transform_mode
         )
     # Spell Checker
