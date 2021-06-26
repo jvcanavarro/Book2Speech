@@ -2,6 +2,8 @@
 
 B2S is a stand-alone reading machine to recognize and convert the textual content of books and derivatives into audible feedback via synthesized speech. Based on the Raspberry Pi 3 equipped with the Pi NoIR camera module, Book2Speech is a machine that besides performing the image acquisition and the Optical Character Recognition and Text-to-Speech procedures, has modules for image and text processing aiming to improve the representativeness of the synthesized voice, reproduced through an external speaker.
 
+Book2Speech was also developed as my graduation project. For more information about the development methodology and performance of the system under various scenarios refer to my [Graduation Thesis](https://drive.google.com/file/d/1azJqZB9yHk0kwOSTNJ8mZLlrmRxDFUMm/view) or the [official Hackaday page](https://hackaday.io/project/170621-automatic-reading-machine).
+
 ## Requirements
 
 * Tesseract ≥ 4.0
