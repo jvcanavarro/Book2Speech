@@ -67,12 +67,12 @@ Advanced Parameters:
 ### Examples
 
 ```bash
-$ python book2speech/core.py --image data/images/book.png --text data/texts/book.txt \
+$ python book2speech/core.py --image data/images/book.jpg --text data/texts/book.txt \
 --calculate-metrics
 ```
 
 ```bash
-$ python book2speech/core.py --image data/images/book.png --text data/texts/book.txt \
+$ python book2speech/core.py --image data/images/book.jpg --text data/texts/book.txt \
 --bigram dicts/en_bi.txt --improve-image --correction-mode=segmentation --transform-mode=extended \
 --blur-mode=gaussian --thresh-mode=otsu --dewarp --optimizer=l-bfgs-b --calculate-metrics
 ```
